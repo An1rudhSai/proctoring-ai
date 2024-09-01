@@ -1,0 +1,2 @@
+[console_scripts]
+proctoring_ai = proctoring_ai.app:main

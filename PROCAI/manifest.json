@@ -1,0 +1,16 @@
+{
+    "manifest_version": 3,
+    "name": "Proctoring AI",
+    "version": "1.0",
+    "description": "Proctoring AI Web Application",
+    "action": {
+      "default_popup": "index.html"
+    },
+    "permissions": [
+      "activeTab"
+    ],
+    "icons": {
+      "48": "assets/icon.png"
+    }
+  }
+  

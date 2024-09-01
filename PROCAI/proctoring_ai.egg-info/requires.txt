@@ -1,0 +1,6 @@
+opencv-python
+dlib
+numpy
+tensorflow
+wget
+flask

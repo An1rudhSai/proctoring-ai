@@ -1,0 +1,14 @@
+README.md
+setup.py
+proctoring_ai/__init__.py
+proctoring_ai/app.py
+proctoring_ai/face_detector.py
+proctoring_ai/face_landmarks.py
+proctoring_ai/face_spoofing.py
+proctoring_ai/final.py
+proctoring_ai.egg-info/PKG-INFO
+proctoring_ai.egg-info/SOURCES.txt
+proctoring_ai.egg-info/dependency_links.txt
+proctoring_ai.egg-info/entry_points.txt
+proctoring_ai.egg-info/requires.txt
+proctoring_ai.egg-info/top_level.txt
