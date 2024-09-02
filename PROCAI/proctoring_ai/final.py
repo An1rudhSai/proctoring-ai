@@ -319,13 +319,13 @@ def weights_download(out='models/yolov3.weights'):
     
 #weights_download() # to download weights
 yolo = YoloV3()
-load_darknet_weights(yolo, 'models/yolov3.weights') 
+load_darknet_weights(yolo, '/Users/amruth/Desktop/Proctoring-AI/PROCAI/proctoring_ai/models/yolov3.weights') 
 
 cap = cv2.VideoCapture(0)
 # Load YOLO model and weights
-yolo = YoloV3()
+'''yolo = YoloV3()
 #weights_download()  # Uncomment if weights need to be downloaded
-load_darknet_weights(yolo, 'models/yolov3.weights') 
+load_darknet_weights(yolo, '/Users/amruth/Desktop/Proctoring-AI/PROCAI/proctoring_ai/models/yolov3.weights') '''
 
 # Dlib face detector and landmark predictor
 detector = dlib.get_frontal_face_detector()
@@ -428,7 +428,7 @@ def process_frame(frame):
     img_resized = cv2.resize(img, (320, 320))
     img_resized = img_resized.astype(np.float32)
     img_resized = np.expand_dims(img_resized, 0) / 255
-    class_names = [c.strip() for c in open("models/classes.TXT").readlines()]
+    class_names = [c.strip() for c in open("/Users/amruth/Desktop/Proctoring-AI/PROCAI/proctoring_ai/models/classes.txt").readlines()]
 
     # YOLO detection
     boxes, scores, classes, nums = yolo(img_resized)

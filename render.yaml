@@ -1,8 +1,0 @@
-services:
-  - type: web
-    name: your-service-name
-    env: python
-    buildCommand: |
-      apt-get update && apt-get install -y cmake
-      pip install -r requirements.txt
-    startCommand: gunicorn -w 4 -b 0.0.0.0:$PORT PROCAI.proctoring_ai.app:app
