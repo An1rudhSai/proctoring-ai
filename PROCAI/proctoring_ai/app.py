@@ -12,13 +12,13 @@ import requests
 
 app = Flask(__name__)
 
-# Constants
-EMAIL_SENDER = 'anirudhyetikuri@gmail.com'
-EMAIL_PASSWORD = 'djtsxurqlhlsvmrz'
+# Constants and Configuration
+EMAIL_SENDER = os.getenv('EMAIL_SENDER', 'your_email@gmail.com')
+EMAIL_PASSWORD = os.getenv('EMAIL_PASSWORD', 'your_password')  # Ideally, use an environment variable
 SMTP_SERVER = 'smtp.gmail.com'
 SMTP_PORT = 587
-FINAL_SCRIPT = '/Users/amruth/Desktop/Proctoring-AI/PROCAI/proctoring_ai/final.py'
-REPORT_FILENAME = '/Users/amruth/Desktop/Proctoring-AI/report.json'
+FINAL_SCRIPT = os.getenv('FINAL_SCRIPT', 'path/to/your/final.py')  # Adjusted for environment
+REPORT_FILENAME = os.getenv('REPORT_FILENAME', 'report.json')  # Adjusted for environment
 
 # Global variable to hold the process and timing
 process = None
@@ -43,6 +43,10 @@ def send_email(subject, body, recipient_email):
         print(f"Failed to send email: {e}")
 
 def write_report(report_data):
+    # Ensure the directory exists before writing to the file
+    os.makedirs(os.path.dirname(REPORT_FILENAME), exist_ok=True)
+    
+    # Write the report data to the file
     with open(REPORT_FILENAME, 'w') as file:
         json.dump(report_data, file, indent=4)
 
@@ -80,17 +84,18 @@ def monitor_process():
     if report_email_data and 'name' in report_email_data and 'email' in report_email_data:
         full_output = (f"Report for {report_email_data['name']}\n\n"
                        f"Started at: {start_time}\nEnded at: {end_time}\nDuration: {duration}\n\n"
-                       f"Total run time: {report_data.get('Total run time', 'Not available')}\n"
-                       f"Head tilt time: {report_data.get('Head tilt time', 'Not available')}\n"
-                       f"Mouth opening time: {report_data.get('Mouth opening time', 'Not available')}\n"
-                       f"Phone detected: {report_data.get('Phone detected', 'Not available')}\n"
-                       f"Multiple people detected: {report_data.get('Multiple people detected', 'Not available')}\n")
+                       f"Total run time: {report_data.get('total_run_time', 'Not available')}\n"
+                       f"Head tilt time: {report_data.get('head_tilt_time', 'Not available')}\n"
+                       f"Mouth opening time: {report_data.get('mouth_opening_time', 'Not available')}\n"
+                       f"Phone detected: {report_data.get('phone_detected', 'Not available')}\n"
+                       f"Multiple people detected: {report_data.get('multiple_people_detected', 'Not available')}\n")
         send_email("Proctoring Report", full_output, report_email_data['email'])
         print("Email Sent!")  # Print the message for debugging
 
     # Notify the front-end that the process has ended
     with app.app_context():
-        requests.post('http://127.0.0.1:5000/notify_end')
+        public_url = os.getenv('RENDER_EXTERNAL_URL', 'http://127.0.0.1:5000')
+        requests.post(f'{public_url}/notify_end')
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -132,4 +137,4 @@ def notify_end():
 if __name__ == "__main__":
     # Use the environment variable PORT for Render deployment or default to 5000 for local development
     port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port, debug=True)
+    app.run(host="0.0.0.0", port=port, debug=False)
