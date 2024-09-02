@@ -13,12 +13,12 @@ import requests
 app = Flask(__name__)
 
 # Constants
-EMAIL_SENDER = 'anirudhyetikuri@gmail.com'
-EMAIL_PASSWORD = 'djtsxurqlhlsvmrz'
+EMAIL_SENDER = os.getenv('EMAIL_SENDER')
+EMAIL_PASSWORD = os.getenv('EMAIL_PASSWORD')
 SMTP_SERVER = 'smtp.gmail.com'
 SMTP_PORT = 587
-FINAL_SCRIPT = '/Users/amruth/Desktop/Proctoring-AI/PROCAI/proctoring_ai/final.py'
-REPORT_FILENAME = '/Users/amruth/Desktop/Proctoring-AI/report.json'
+FINAL_SCRIPT = os.getenv('FINAL_SCRIPT', '/Users/amruth/Desktop/Proctoring-AI/PROCAI/proctoring_ai/final.py')
+REPORT_FILENAME = os.getenv('REPORT_FILENAME', '/Users/amruth/Desktop/Proctoring-AI/report.json')
 
 # Global variable to hold the process and timing
 process = None
@@ -62,7 +62,7 @@ def monitor_process():
             report_data = json.load(file)
     except (FileNotFoundError, json.JSONDecodeError):
         report_data = {
-            'name': report_email_data['name'],
+            'name': report_email_data['name'] if report_email_data else 'Unknown',
             'start_time': start_time.strftime('%Y-%m-%d %H:%M:%S'),
             'end_time': end_time.strftime('%Y-%m-%d %H:%M:%S'),
             'duration': str(duration),
@@ -80,11 +80,11 @@ def monitor_process():
     if report_email_data and 'name' in report_email_data and 'email' in report_email_data:
         full_output = (f"Report for {report_email_data['name']}\n\n"
                        f"Started at: {start_time}\nEnded at: {end_time}\nDuration: {duration}\n\n"
-                       f"Total run time: {report_data.get('Total run time', 'Not available')}\n"
-                       f"Head tilt time: {report_data.get('Head tilt time', 'Not available')}\n"
-                       f"Mouth opening time: {report_data.get('Mouth opening time', 'Not available')}\n"
-                       f"Phone detected: {report_data.get('Phone detected', 'Not available')}\n"
-                       f"Multiple people detected: {report_data.get('Multiple people detected', 'Not available')}\n")
+                       f"Total run time: {report_data.get('total_run_time', 'Not available')}\n"
+                       f"Head tilt time: {report_data.get('head_tilt_time', 'Not available')}\n"
+                       f"Mouth opening time: {report_data.get('mouth_opening_time', 'Not available')}\n"
+                       f"Phone detected: {report_data.get('phone_detected', 'Not available')}\n"
+                       f"Multiple people detected: {report_data.get('multiple_people_detected', 'Not available')}\n")
         send_email("Proctoring Report", full_output, report_email_data['email'])
         print("Email Sent!")  # Print the message for debugging
 
@@ -130,4 +130,4 @@ def notify_end():
     return jsonify({'success': True, 'message': 'Proctoring has ended'})
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
