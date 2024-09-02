@@ -1,7 +1,7 @@
 {
-    "Total run time": 60.52692675590515,
-    "Head tilt time": 0.0,
-    "Mouth opening time": 32.94475340843201,
+    "Total run time": 19.63576078414917,
+    "Head tilt time": 0,
+    "Mouth opening time": 1.1421458721160889,
     "Phone detected": false,
-    "Multiple people detected": true
+    "Multiple people detected": false
 }
